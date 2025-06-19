@@ -1,97 +1,44 @@
-//1
-const user = {
-  name: 'John',
-  age: 30,
-  hobby: 'reading',
-  premium: true,
+const Transaction = {
+  DEPOSIT: 'deposit',
+  WITHDRAW: 'withdraw',
 };
 
+const account = {
+  balance: 0,
+  transactions: [],
+  nextId: 1,
 
-user.mood = 'happy';
-user.hobby = 'skydiving';
-user.premium = false;
-for (const key of Object.keys(user)) {
-  console.log(`${key}: ${user[key]}`);
-}
+  createTransaction(amount, type) {
+    return { id: this.nextId++, type, amount };
+  },
 
-//2
-function countProps(obj) {
-  return Object.keys(obj).length;
-}
-console.log(countProps({ name: 'Mango', age: 2 }));
+  deposit(amount) {
+    this.balance += amount;
+    const transaction = this.createTransaction(amount, Transaction.DEPOSIT);
+    this.transactions.push(transaction);
+  },
 
-//3
-function findBestEmployee(employees) {
-  let best = '';
-  let maxTasks = 0;
-
-  for (const name in employees) {
-    if (employees[name] > maxTasks) {
-      maxTasks = employees[name];
-      best = name;
+  withdraw(amount) {
+    if (amount > this.balance) {
+      console.log('Недостатньо коштів');
+      return;
     }
-  }
+    this.balance -= amount;
+    const transaction = this.createTransaction(amount, Transaction.WITHDRAW);
+    this.transactions.push(transaction);
+  },
 
-  return best;
-}
+  getBalance() {
+    return this.balance;
+  },
 
-console.log(findBestEmployee({
-  Ann: 29,
-  David: 35,
-  Helen: 1,
-  Lorence: 99
-})); 
+  getTransactionDetails(id) {
+    return this.transactions.find(({ id: tId }) => tId === id);
+  },
 
-//4
-function countTotalSalary(employees) {
-  let total = 0;
-  for (const salary of Object.values(employees)) {
-    total += salary;
-  }
-  return total;
-}
-
-
-console.log(countTotalSalary({
-  Mango: 100,
-  Poly: 150,
-  Alfred: 80
-}));
-
-//5
-function getAllPropValues(arr, prop) {
-  const values = [];
-  for (const obj of arr) {
-    if (prop in obj) {
-      values.push(obj[prop]);
-    }
-  }
-  return values;
-}
-
-const products = [
-  { name: 'Radar', price: 1300, quantity: 4 },
-  { name: 'Scanner', price: 2700, quantity: 3 },
-];
-
-console.log(getAllPropValues(products, 'name')); 
-
-//6
-function calculateTotalPrice(allProducts, productName) {
-  for (const product of allProducts) {
-    if (product.name === productName) {
-      return product.price * product.quantity;
-    }
-  }
-  return 0;
-}
-
-
-const items = [
-  { name: 'Radar', price: 1300, quantity: 4 },
-  { name: 'Scanner', price: 2700, quantity: 3 },
-];
-
-console.log(calculateTotalPrice(items, 'Radar')); 
-
-
+  getTransactionTotal(type) {
+    return this.transactions
+      .filter(({ type: tType }) => tType === type)
+      .reduce((total, { amount }) => total + amount, 0);
+  },
+};
