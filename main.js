@@ -10,14 +10,14 @@ Account.prototype.getInfo = function () {
 
 console.log(Account.prototype.getInfo);
 
-const mango = new Account({
+const mango1 = new Account({
   login: 'Mangozedog',
   email: 'mango@dog.woof',
 });
 
 mango.getInfo();
 
-const poly = new Account({
+const poly1 = new Account({
   login: 'Poly',
   email: 'poly@mail.com',
 });
@@ -37,7 +37,7 @@ class User {
   }
 }
 
-const mango = new User({
+const mango2 = new User({
   name: 'Mango',
   age: 2,
   followers: 20,
@@ -45,7 +45,7 @@ const mango = new User({
 
 mango.getInfo();
 
-const poly = new User({
+const poly2 = new User({
   name: 'Poly',
   age: 3,
   followers: 17,
